@@ -19,10 +19,9 @@ self.addEventListener("install", (event) => {
     ])
   })
 
-  const promiseCacheInmutable = caches.open('cache-v1.1').then((cache) => {
+  const promiseCacheInmutable = caches.open('inmutable-cache-v1.1').then((cache) => {
     return cache.addAll([
       'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
-      'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
     ])
   })
 
@@ -31,7 +30,18 @@ self.addEventListener("install", (event) => {
 
 
 self.addEventListener("fetch", (event) => {
-  
-  const respCache = caches.match(event.request)
-  event.respondWith(respCache)
+  const resp = caches.match(event.request)
+  .then((respCache)=>{
+    // verificar si está 0 no en cache
+    if(respCache){
+      return respCache
+    }
+    return fetch(event.request).then((respWeb)=>{
+      caches.open('dynamic-cache-v1.1').then((chacheDynamic)=>{
+        chacheDynamic.put(event.request, respWeb)
+      });
+      return respWeb.clone();
+    });
+  });
+  event.respondWith(resp)
 });
