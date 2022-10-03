@@ -1,4 +1,5 @@
 const INIT_MSG = "SW:";
+const INIT_URL = "/";
 
 console.log("SW: Hola Mundo Violeta!");
 
@@ -6,15 +7,15 @@ self.addEventListener("install", (event) => {
   console.log(INIT_MSG, "install");
   const promiseCache = caches.open('cache-v1.1').then((cache) => {
     return cache.addAll([
-      '/pwa-3/',
-      '/pwa-3/index.html',
-      '/pwa-3/js/app.js',
-      '/pwa-3/images/lapras.png',
-      '/pwa-3/css/style.css',
-      '/pwa-3/pages/Dividir.html',
-      '/pwa-3/pages/Sumar.html',
-      '/pwa-3/pages/Restar.html',
-      '/pwa-3/pages/Multiplicar.html'
+      `${INIT_URL}`,
+      `${INIT_URL}index.html`,
+      `${INIT_URL}js/app.js`,
+      `${INIT_URL}images/lapras.png`,
+      `${INIT_URL}css/style.css`,
+      `${INIT_URL}pages/Dividir.html`,
+      `${INIT_URL}pages/Sumar.html`,
+      `${INIT_URL}pages/Restar.html`,
+      `${INIT_URL}pages/Multiplicar.html`
     ])
   })
 
