@@ -1,11 +1,26 @@
 const INIT_MSG = "SW:";
 const INIT_URL = "/";
 
-console.log("SW: Hola Mundo Violeta!");
+const STATI_CACHE_NAME = "static-cache-v1.1";
+const INMUTABLE_CACHE_NAME = "inmutable-cache-v1.1";
+const DYNAMIC_CACHE_NAME = "dynamic-cache-v1.1";
+
+
+function cleanCache(cacheName, numberItems) {
+  caches.open(cacheName).then((cache) => {
+    cache.keys().then((keys) => {
+      if (keys.length > numberItems) {
+        cache.delete(keys[0]).then(() => {
+          cleanCache(cacheName, numberItems)
+        })
+      }
+    })
+  })
+}
 
 self.addEventListener("install", (event) => {
   console.log(INIT_MSG, "install");
-  const promiseCache = caches.open('cache-v1.1').then((cache) => {
+  const promiseCache = caches.open(STATI_CACHE_NAME).then((cache) => {
     return cache.addAll([
       `${INIT_URL}`,
       `${INIT_URL}index.html`,
@@ -19,7 +34,7 @@ self.addEventListener("install", (event) => {
     ])
   })
 
-  const promiseCacheInmutable = caches.open('inmutable-cache-v1.1').then((cache) => {
+  const promiseCacheInmutable = caches.open(INMUTABLE_CACHE_NAME).then((cache) => {
     return cache.addAll([
       'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
     ])
@@ -31,17 +46,18 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const resp = caches.match(event.request)
-  .then((respCache)=>{
-    // verificar si está 0 no en cache
-    if(respCache){
-      return respCache
-    }
-    return fetch(event.request).then((respWeb)=>{
-      caches.open('dynamic-cache-v1.1').then((chacheDynamic)=>{
-        chacheDynamic.put(event.request, respWeb)
+    .then((respCache) => {
+      // verificar si está 0 no en cache
+      if (respCache) {
+        return respCache
+      }
+      return fetch(event.request).then((respWeb) => {
+        caches.open(DYNAMIC_CACHE_NAME).then((chacheDynamic) => {
+          chacheDynamic.put(event.request, respWeb)
+          cleanCache(DYNAMIC_CACHE_NAME, 4);
+        });
+        return respWeb.clone();
       });
-      return respWeb.clone();
     });
-  });
   event.respondWith(resp)
 });
