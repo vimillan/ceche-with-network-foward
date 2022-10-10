@@ -26,13 +26,17 @@ self.addEventListener("install", (event) => {
       `${INIT_URL}`,
       `${INIT_URL}index.html`,
       `${INIT_URL}js/app.js`,
-      `${INIT_URL}css/style.css`
+      `${INIT_URL}js/main.js`,
+      `${INIT_URL}css/style.css`,
+      `${INIT_URL}images/Pokemon.png`,
     ])
   })
 
   const promiseCacheInmutable = caches.open(INMUTABLE_CACHE_NAME).then((cache) => {
     return cache.addAll([
       'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+      'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js',
+      'https://pokeapi.co/api/v2/pokemon/'
     ])
   })
 
@@ -41,19 +45,18 @@ self.addEventListener("install", (event) => {
 
 
 self.addEventListener("fetch", (event) => {
-  const resp = fetch(event.request).then((respWeb) => {
-    if (!respWeb) {
-      return caches.match(event.request);
-    }
-
-    caches.open(DYNAMIC_CACHE_NAME).then((chacheDynamic) => {
-      chacheDynamic.put(event.request, respWeb)
-      cleanCache(DYNAMIC_CACHE_NAME, 4);
+  const resp = caches.match(event.request)
+    .then((respCache) => {
+      if (respCache) {
+        return respCache
+      }
+      return fetch(event.request).then((respWeb) => {
+        caches.open(DYNAMIC_CACHE_NAME).then((chacheDynamic) => {
+          chacheDynamic.put(event.request, respWeb)
+          cleanCache(DYNAMIC_CACHE_NAME, 20);
+        });
+        return respWeb.clone();
+      });
     });
-
-    return respWeb.clone()
-  }).catch(() => {
-    return caches.match(event.request);
-  });
   event.respondWith(resp)
 });
