@@ -26,6 +26,12 @@ self.addEventListener("install", (event) => {
       `${INIT_URL}`,
       `${INIT_URL}index.html`,
       `${INIT_URL}css/style.css`,
+      `${INIT_URL}images/icons/android-launchericon-96-96.png`,
+      `${INIT_URL}images/icons/android-launchericon-144-144.png`,
+      `${INIT_URL}images/icons/android-launchericon-192-192.png`,
+      `${INIT_URL}images/icons/android-launchericon-512-512.png`,
+      `${INIT_URL}images/icons/android-launchericon-72-72.png`,
+
     ]);
   });
 
