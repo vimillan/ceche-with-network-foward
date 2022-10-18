@@ -1,0 +1,11 @@
+.item-list{
+    background-color: rgba(164, 222, 255, 0.562);
+    border-radius: 10px;
+}
+.avatar{
+    padding: 5px !important;
+    border-radius: 1rem !important;
+    border: solid !important;
+    border-color: white !important;
+    border-radius: 100px !important;
+}
