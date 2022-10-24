@@ -31,7 +31,7 @@ self.addEventListener("install", (event) => {
       `${INIT_URL}images/icons/android-launchericon-192-192.png`,
       `${INIT_URL}images/icons/android-launchericon-512-512.png`,
       `${INIT_URL}images/icons/android-launchericon-72-72.png`,
-
+      `${INIT_URL}manifest.json`,
     ]);
   });
 
@@ -51,27 +51,17 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  for (const data of REQUEST_DATA) {
-    let resp;
-    if (event.request.url.includes(data)) {
-      resp = fetch(event.request)
-        .then((respWeb) => {
-          if (!respWeb) {
-            return caches.match(event.request);
-          }
-          caches.open(DYNAMIC_CACHE_NAME).then((chacheDynamic) => {
-            chacheDynamic.put(event.request, respWeb);
-            cleanCache(DYNAMIC_CACHE_NAME, 20);
-          });
-          return respWeb.clone();
-        })
-        .catch(() => {
-          return caches.match(event.request);
-        });
-    } else {
-      resp = caches.match(event.request);
+  const resp = caches.match(event.request).then((respCache) => {
+    if (respCache) {
+      return respCache;
     }
-
-    event.respondWith(resp);
-  }
+    return fetch(event.request).then((respWeb) => {
+      caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+        cache.put(event.request, respWeb);
+        cleanCache(DYNAMIC_CACHE_NAME, 10);
+      });
+      return respWeb.clone();
+    });
+  });
+  event.respondWith(resp);
 });
