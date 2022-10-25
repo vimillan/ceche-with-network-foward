@@ -8,16 +8,16 @@
     <meta name="theme_color" content="#C6E1F1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
-    <title>Práctica 07</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="manifest" href="../manifest.json">
+    <title>Recientes</title>
 </head>
 
 <body>
 
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Mis notas</a>
+            <a class="navbar-brand" href="../index.html">Notas</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -32,10 +32,10 @@
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="pages/all-notes.html">Mis notas</a>
+                            <a class="nav-link" href="../pages/all-notes.html">Mis notas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="pages/recents.html">Más recientes</a>
+                            <a class="nav-link active" aria-current="page" href="../pages/recents.html">Más recientes</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -60,35 +60,6 @@
 
     <div class="container mt-5">
         <br />
-        <div class="row mt-3">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h3>Nueva nota</h3>
-                                <div class="mb-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Escribe una nota
-                                        ..</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <button type="button" class="btn btn-light">
-                                            <i class="bi bi-camera"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col text-end"><button type="button"
-                                            class="btn btn-success">Guardar</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="row mt-3">
             <div class="col mb-4">
@@ -96,7 +67,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h3>Mis notas</h3>
+                                <h3>Notas recientes</h3>
                                 <div class="item-list mb-2">
                                     <div class="row mx-2">
                                         <div class="col-3 col-lg-1 mt-2 mb-2">
@@ -129,7 +100,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         if (navigator.serviceWorker) {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register('../sw.js')
         }
     </script>
 </body>

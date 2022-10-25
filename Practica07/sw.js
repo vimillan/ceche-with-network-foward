@@ -26,6 +26,8 @@ self.addEventListener("install", (event) => {
       `${INIT_URL}`,
       `${INIT_URL}index.html`,
       `${INIT_URL}css/style.css`,
+      `${INIT_URL}pages/offline.html`,
+      `${INIT_URL}images/lapras-square.png`,
       `${INIT_URL}images/icons/android-launchericon-96-96.png`,
       `${INIT_URL}images/icons/android-launchericon-144-144.png`,
       `${INIT_URL}images/icons/android-launchericon-192-192.png`,
@@ -50,6 +52,20 @@ self.addEventListener("install", (event) => {
   event.waitUntil(Promise.all([promiseCache, promiseCacheInmutable]));
 });
 
+self.addEventListener("install", (event) => {
+  console.log(INIT_MSG, "activated");
+  const prom = caches.keys().then((cachesItems) => {
+    cachesItems.forEach(element => {
+      if (element !== STATI_CACHE_NAME && element.includes('static')) {
+        return caches.delete(element)
+      }
+    })
+  })
+
+  event.waitUntil(prom);
+
+});
+
 self.addEventListener("fetch", (event) => {
   const resp = caches.match(event.request).then((respCache) => {
     if (respCache) {
@@ -62,6 +78,14 @@ self.addEventListener("fetch", (event) => {
       });
       return respWeb.clone();
     });
-  });
+  }).catch((err) => {
+    if (event.request.headers.get('accept').includes('text/html')) {
+      return caches.match('pages/offline.html')
+    }
+
+    if (event.request.headers.get('accept').includes('image/')) {
+      return caches.match('images/lapras-square.png')
+    }
+  })
   event.respondWith(resp);
 });

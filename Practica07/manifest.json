@@ -8,6 +8,7 @@
     "display": "standalone",
     "orientation": "portrait",
     "start_url": "index.html",
+    "version": "1.0.0",
     "icons": [
         {
             "src": "images/icons/android-launchericon-72-72.png",
